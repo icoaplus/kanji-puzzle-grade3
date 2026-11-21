@@ -89,14 +89,24 @@
 .zoomBank .tile { flex:none; width:var(--tile-size,54px); height:var(--tile-size,54px); min-width:var(--tile-size,54px) }
 .profileActions { display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin:8px 0 }
 .profileActions[hidden] { display:none }
+
+#home #recordGrid { grid-template-columns:repeat(auto-fit,minmax(82px,112px)); justify-content:center }
+#home .record { aspect-ratio:1; min-height:0; padding:6px; gap:4px; touch-action:manipulation }
+#home .recordVisual { width:60%; height:57%; min-height:0 }
+#home .recordName { font-size:clamp(13px,2vw,17px); line-height:1.15 }
+#profileEditor[hidden],#profileEraseConfirm[hidden],#resetPen[hidden] { display:none }
+#profileEraseMessage { flex-basis:100%; text-align:center }
+.zoomActions { gap:clamp(12px,9dvh,64px) }
+#closeZoom { border:0; box-shadow:none; background:#fff }
+#closeZoom:focus { outline:none; background:#f3f9fd }
 </style>
 </head>
 <body>
 <section id="cover" class="screen cover"><main class="coverCard"><h1>かんじパズル　３年生</h1><div class="coverArt" aria-label="大きく育った3年生の木"><img id="coverImage" alt="大きな木ときつねとカードのイラスト"></div><button id="coverStart" class="coverStart">はじめる</button></main></section>
-<section id="home" class="screen" hidden><div class="hero"><div class="card"><div class="homeTitle"><h1>かんじパズル　３年生</h1><p class="sub">記録する人を選んで、学び方を選びます。</p></div><div class="profileEntry"><label for="profileNameInput">記録する人</label><input id="profileNameInput" maxlength="20" placeholder="名前を入力"><button id="addProfile">名前を追加</button></div><div id="recordGrid" class="recordGrid"></div><div id="profileActions" class="profileActions" hidden><button id="renameProfile">名前を変更</button><button id="eraseHomeRecord">記録を消去</button></div><p id="profileHint" class="profileHint"></p><div id="methodGrid" class="methodGrid"></div><div id="summary" class="summary"></div></div></div></section>
+<section id="home" class="screen" hidden><div class="hero"><div class="card"><div class="homeTitle"><h1>かんじパズル　３年生</h1></div><div id="recordGrid" class="recordGrid"></div><div id="profileActions" class="profileActions"><button id="addProfile">記録を追加</button><button id="renameProfile">名前を変更</button><button id="eraseHomeRecord">記録を消去</button></div><form id="profileEditor" class="profileEntry" hidden><input id="profileNameInput" aria-label="名前" maxlength="20" placeholder="名前を入力" required><button class="primary" type="submit">保存</button><button id="cancelProfileEdit" type="button">キャンセル</button></form><div id="profileEraseConfirm" class="profileActions" hidden><span id="profileEraseMessage"></span><button id="confirmProfileErase">消去する</button><button id="cancelProfileErase">キャンセル</button></div><div id="methodGrid" class="methodGrid"></div><div id="summary" class="summary"></div></div></div></section>
 <section id="groups" class="screen" hidden><header class="top"><button data-home>← もどる</button><h1 id="groupsTitle"></h1><button id="groupCharsToggle" class="charsToggle" hidden>漢字を表示</button><span class="spacer"></span><button id="recordsButton">きろくを見る</button></header><div id="groupControls"></div><main id="groupContent"></main></section>
 <section id="settings" class="screen" hidden><div class="settings card"><button id="settingsBack">← 選びなおす</button><h2 id="settingsTitle"></h2><p id="settingsCount"></p><div class="settingsGrid"><fieldset><legend>取り組み方</legend><div class="options"><label><input type="radio" name="mode" value="parts" checked>組み立てる</label><label><input type="radio" name="mode" value="whole">完成形</label><label><input type="radio" name="mode" value="pen">書く</label></div></fieldset><fieldset><legend>読み方</legend><div id="readingOptions" class="options"></div></fieldset><fieldset><legend>1ページに表示する問題数</legend><div class="options"><label><input type="radio" name="perPage" value="1">1問</label><label><input type="radio" name="perPage" value="2">2問</label><label><input type="radio" name="perPage" value="3">3問</label><label><input type="radio" name="perPage" value="4">4問</label><label><input type="radio" name="perPage" value="5" checked>5問</label></div></fieldset><fieldset><legend>判定</legend><div class="options"><label><input type="radio" name="judge" value="easy">やさしい</label><label><input type="radio" name="judge" value="normal" checked>ふつう</label></div></fieldset></div><button id="start" class="primary startBtn">はじめる</button></div></section>
-<section id="lesson" class="screen lesson" hidden><header class="bar"><strong id="lessonMonth" hidden></strong><button id="lessonBack">📜 もくじ</button><span class="barGap"></span><button id="prev">⬅️まえ</button><span id="pageLabel" class="page"></span><button id="next">つぎ➡️</button><button id="resetButton" aria-label="やりなおす">↶</button><button id="zoomButton" aria-label="拡大"><span class="zoomIcon" aria-hidden="true"><small>↖</small><small>↗</small><b>大</b><small>↙</small><small>↘</small></span></button><button id="lessonSettings">⚙️設定</button></header><div class="work"><main id="paper" class="paper"></main><aside class="side"><button id="returnPiece">↩️ 部品を<br>もどす</button><button id="check" class="primary">できた！</button></aside></div><p id="feedback" class="feedback"></p><div class="bank"><button id="hintButton" hidden>ヒントを表示</button><button id="undoPen" hidden>ひとつもどす</button><div id="tiles" class="tiles"></div></div></section>
+<section id="lesson" class="screen lesson" hidden><header class="bar"><strong id="lessonMonth" hidden></strong><button id="lessonBack">📜 もくじ</button><span class="barGap"></span><button id="prev">⬅️まえ</button><span id="pageLabel" class="page"></span><button id="next">つぎ➡️</button><button id="resetButton" aria-label="やりなおす">↶</button><button id="zoomButton" aria-label="拡大"><span class="zoomIcon" aria-hidden="true"><small>↖</small><small>↗</small><b>大</b><small>↙</small><small>↘</small></span></button><button id="lessonSettings">⚙️設定</button></header><div class="work"><main id="paper" class="paper"></main><aside class="side"><button id="returnPiece">↩️ 部品を<br>もどす</button><button id="check" class="primary">できた！</button></aside></div><p id="feedback" class="feedback"></p><div class="bank"><button id="hintButton" hidden>ヒントを表示</button><button id="undoPen" hidden>ひとつもどす</button><button id="resetPen" hidden>やりなおす</button><div id="tiles" class="tiles"></div></div></section>
 <section id="result" class="screen" hidden><main class="results card"><h1>できたね！</h1><p>今回の取り組みを1回として記録しました。もう一度学ぶ漢字にチェックできます。</p><div id="resultChars" class="resultChars"></div><div class="choiceBar"><button id="resultHome" class="primary">もくじへ</button><button id="retryNow">チェックした漢字をもう一度</button></div></main></section>
 <section id="records" class="screen" hidden><header class="top"><button data-home>← もどる</button><h1 id="recordsTitle">きろく</h1></header><main class="records card"><div class="recordTabsWrap"><div id="recordTabs" class="recordGrid"></div></div><div id="recordStats" class="summary"></div><div class="recordViewSwitch"><button id="listViewButton" class="active">一覧</button><button id="treeViewButton">図</button></div><div id="historyWrap" class="historyWrap"><table class="history"><thead><tr><th>日</th><th>月・内容</th><th>漢字</th><th>モード</th><th>字数</th></tr></thead><tbody id="historyBody"></tbody></table></div><div id="treeWrap" class="treeWrap" hidden><div class="treeLegend"><span><i class="leafKey" style="background:#dce98d"></i>未学習</span><span><i class="leafKey" style="background:#76ad59"></i>学習済み</span><span><i class="leafKey" style="background:#ad6048"></i>もう一度</span></div><div class="treeToolbar"><button id="treeZoomOut" aria-label="縮小">－</button><button id="treeReset">木全体</button><button id="treeZoomIn" aria-label="拡大">＋</button></div><div id="treeViewport" class="treeViewport"><div id="treeCanvas" class="treeCanvas"></div></div><p class="treeHelp">指2本で拡大・縮小。拡大後は指やマウスで移動できます。</p></div><div class="deleteControls"><label for="deleteProfileSelect">消す記録</label><select id="deleteProfileSelect"></select><button id="clearRecord">選んだ記録を消す</button></div></main></section>
 <dialog class="lessonZoom" id="zoom"><header class="zoomTop"><h2 id="zoomTitle"></h2><button id="closeZoom">もどる</button></header><div class="zoomBody"><div id="zoomStage" class="zoomStage"></div><aside class="zoomActions"><button id="zoomReturn">部品をもどす</button><button id="zoomReset">やりなおす</button><button id="zoomCheck" class="primary">できた！</button></aside></div><p id="zoomFeedback" class="feedback"></p><div id="zoomBank" class="zoomBank"></div></dialog>
@@ -118,33 +128,89 @@ const images=new Map();function asset(file){return ASSETS[file]}function image(f
 function show(id){for(const s of $$('.screen'))s.hidden=s.id!==id;window.scrollTo(0,0)}
 function methodName(id){return({A:'Aコース',B:'Bコース',parts:'部品から選ぶ',self:'自分で選ぶ',random:'おまかせ',retry:'もう一度'})[id]||id}
 // Give new users named slots and keep the IDs of existing records.
-for(let avatar=0;avatar<3;avatar++){
+const profileLimit=6;
+for(let avatar=0;avatar<3&&profileEntries().length<profileLimit;avatar++){
   if(profileEntries().some(([,p])=>p.avatar===avatar))continue;
   const id=newProfileId();
   saved.profiles[id]={...emptyProfile('きろく'+(avatar+1)),avatar};
 }
 if(!saved.active)saved.active=profileEntries()[0][0];
-function renameActiveProfile(){
-  const p=profile();
-  if(!p)return;
-  const name=promptProfileName(p.name);
-  if(!name)return;
-  p.name=name;
+let editingProfile=null,lastProfileTap=null;
+function closeProfileEditor(){
+  $('#profileEditor').hidden=true;
+  editingProfile=null;
+}
+function editProfile(id){
+  if(id===null&&profileEntries().length>=profileLimit)return;
+  editingProfile={id};
+  $('#profileEraseConfirm').hidden=true;
+  $('#profileEditor').hidden=false;
+  const input=$('#profileNameInput');
+  input.value=id?saved.profiles[id].name:'';
+  input.focus();
+  input.select();
+}
+function saveProfileName(e){
+  e.preventDefault();
+  const input=$('#profileNameInput'),name=input.value.trim();
+  if(!editingProfile||!name){input.focus();return}
+  const {id}=editingProfile;
+  if(id){
+    saved.profiles[id].name=name;
+  }else{
+    if(profileEntries().length>=profileLimit)return;
+    const newId=newProfileId();
+    saved.profiles[newId]={...emptyProfile(name),avatar:profileEntries().length%3};
+    saved.active=newId;
+  }
   persist();
+  closeProfileEditor();
   renderHome();
 }
-function promptProfileName(oldName){
-  return (window.prompt('新しい名前を入力してください。',oldName)||'').trim().slice(0,20);
+function selectHomeProfile(e,id){
+  const now=performance.now();
+  const double=e.detail>0&&lastProfileTap?.id===id&&now-lastProfileTap.time<400;
+  lastProfileTap=double||!e.detail?null:{id,time:now};
+  saved.active=id;
+  persist();
+  closeProfileEditor();
+  $('#profileEraseConfirm').hidden=true;
+  renderHome(false);
+  if(double)editProfile(id);
 }
-function clearProfileRecord(id){
+function clearProfileRecord(id,confirmed=false){
   const p=saved.profiles[id];
-  if(!p||!confirm(`「${p.name}」の学習記録をすべて消しますか？`))return false;
+  if(!p||(!confirmed&&!confirm(`「${p.name}」の学習記録をすべて消しますか？`)))return false;
   saved.profiles[id]={...emptyProfile(p.name),avatar:p.avatar};
   persist();
   return true;
 }
-function addProfile(){const input=$('#profileNameInput'),name=input.value.trim();if(!name){input.focus();return}const same=profileEntries().find(([,p])=>p.name===name);if(same){saved.active=same[0]}else{const id=newProfileId();saved.profiles[id]={...emptyProfile(name),avatar:profileEntries().length%3};saved.active=id}input.value='';persist();renderHome()}
-function renderHome(){show('home');const records=$('#recordGrid');records.replaceChildren();for(const [index,[id,p]] of profileEntries().entries()){const b=el('button','record'+(saved.active===id?' chosen':''));b.append(artIcon('recordVisual', ['rabbit','bear','bird'][p.avatar ?? index%3]),el('span','recordName',p.name));b.onclick=()=>{saved.active=id;persist();renderHome()};records.append(b)}const p=profile();$('#profileActions').hidden=!p;$('#profileHint').textContent=p?`${p.name}さんの記録に保存します。`:'名前を入力して、記録する人を追加してください。';const methods=[['A','Aコース','月ごとに選ぶ'],['B','Bコース','月ごとに選ぶ'],['parts','部品から選ぶ','部首や旁で練習'],['self','自分で選ぶ','習った漢字を選ぶ'],['random','おまかせ','ランダムに練習'],['records','記録を見る','一覧と図で確認']];if(p?.retry.length)methods.push(['retry','もう一度',p.retry.length+'字']);const grid=$('#methodGrid');grid.replaceChildren();for(const [id,title,desc] of methods){const b=el('button','method'+(id==='retry'?' retry':'')),visual=artIcon('methodVisual',id),text=el('span','methodText');text.append(el('strong','',title),el('span','',desc));b.append(visual,text);b.disabled=!p&&id!=='records';b.onclick=()=>id==='records'?renderRecords():openMethod(id);grid.append(b)}const summary=$('#summary');if(!p){summary.textContent='名前を追加すると、取り組みを端末に保存できます。';return}const byMode={};for(const a of p.attempts)byMode[a.mode]=(byMode[a.mode]||0)+1;summary.replaceChildren(el('strong','',p.name), `　取り組み ${p.attempts.length}回　もう一度 ${p.retry.length}字`,el('br'),el('small','',`組み立て ${byMode.parts||0}回／完成形 ${byMode.whole||0}回／書く ${byMode.pen||0}回`))}
+function renderHome(rebuildCards=true){
+  if(rebuildCards){
+    show('home');
+    closeProfileEditor();
+    $('#profileEraseConfirm').hidden=true;
+    lastProfileTap=null;
+    const records=$('#recordGrid');
+    records.replaceChildren();
+    for(const [index,[id,p]] of profileEntries().entries()){
+      const card=el('button','record');
+      card.dataset.profileId=id;
+      card.append(artIcon('recordVisual',['rabbit','bear','bird'][p.avatar??index%3]),el('span','recordName',p.name));
+      card.onclick=e=>selectHomeProfile(e,id);
+      records.append(card);
+    }
+  }
+  for(const card of $$('#recordGrid .record')){
+    const selected=card.dataset.profileId===saved.active;
+    card.classList.toggle('chosen', selected);
+    card.setAttribute('aria-pressed',String(selected));
+  }
+  const p=profile();
+  $('#addProfile').disabled=profileEntries().length>=profileLimit;
+  $('#renameProfile').disabled=!p;
+  $('#eraseHomeRecord').disabled=!p;
+  const methods=[['A','Aコース','月ごとに選ぶ'],['B','Bコース','月ごとに選ぶ'],['parts','部品から選ぶ','部首や旁で練習'],['self','自分で選ぶ','習った漢字を選ぶ'],['random','おまかせ','ランダムに練習'],['records','記録を見る','一覧と図で確認']];if(p?.retry.length)methods.push(['retry','もう一度',p.retry.length+'字']);const grid=$('#methodGrid');grid.replaceChildren();for(const [id,title,desc] of methods){const b=el('button','method'+(id==='retry'?' retry':'')),visual=artIcon('methodVisual',id),text=el('span','methodText');text.append(el('strong','',title),el('span','',desc));b.append(visual,text);b.disabled=!p&&id!=='records';b.onclick=()=>id==='records'?renderRecords():openMethod(id);grid.append(b)}const summary=$('#summary');if(!p){summary.textContent='名前を追加すると、取り組みを端末に保存できます。';return}const byMode={};for(const a of p.attempts)byMode[a.mode]=(byMode[a.mode]||0)+1;summary.replaceChildren(el('strong','',p.name), `　取り組み ${p.attempts.length}回　もう一度 ${p.retry.length}字`,el('br'),el('small','',`組み立て ${byMode.parts||0}回／完成形 ${byMode.whole||0}回／書く ${byMode.pen||0}回`))}
 function openMethod(id){if(!profile()){renderHome();return}currentMethod=id;showGroupChars=false;$('#groupsTitle').textContent=methodName(id);$('#groupControls').replaceChildren();const toggle=$('#groupCharsToggle');toggle.hidden=!(id==='A'||id==='B');toggle.textContent='漢字を表示';const out=$('#groupContent');out.replaceChildren();show('groups');if(id==='A'||id==='B')renderGroups(DATA.courses[id]);else if(id==='parts')renderGroups(DATA.courses.parts);else if(id==='self')renderSelf();else if(id==='random')renderRandom();else openSettings(profile().retry,'もう一度')}
 function renderGroups(groups){const grid=el('div','groupGrid');for(const group of groups){const b=el('button','group'+(showGroupChars?' charsVisible':'')),chars=el('span','groupChars',group.characters.join('・')),visual=el('span','groupVisual');chars.hidden=!showGroupChars;if(group.illustrations?.length){visual.classList.toggle('multi',group.illustrations.length>1);for(const file of group.illustrations){const im=image(file).cloneNode();im.alt='';visual.append(im)}}else visual.textContent=currentMethod==='parts'?'部首・部品\nイラスト':'単元イラスト';visual.style.setProperty('--art-count',group.illustrations?.length||1);b.append(visual,el('strong','',group.title),chars,el('small','',group.characters.length+'字'));b.onclick=()=>openSettings(group.characters,group.title);grid.append(b)}$('#groupContent').append(grid)}
 function toggleGroupChars(){showGroupChars=!showGroupChars;$('#groupCharsToggle').textContent=showGroupChars?'漢字を非表示':'漢字を表示';for(const card of $$('.group'))card.classList.toggle('charsVisible',showGroupChars);for(const chars of $$('.groupChars'))chars.hidden=!showGroupChars}
@@ -156,7 +222,7 @@ function visible(){const start=page*perPage;return questions.slice(start,start+p
 function prompt(q){const line=el('div','zoomPrompt'),ruby=el('ruby'),blank=el('span','zoomBlank','□'),rt=el('rt','',q.reading);ruby.append(blank,rt);line.append(document.createTextNode(q.text.slice(0,q.index)),ruby,document.createTextNode(q.text.slice(q.index+1)));return line}
 function makeSquare(qi,zoom=false){const st=states[qi],wrap=el('div','squareWrap'),box=el('div','square'+(qi===active?' active':'')+(st.done?' done':''));box.dataset.qi=qi;box.dataset.zoom=zoom?'1':'0';box.append(el('span','guide'));for(const [id,at] of Object.entries(st.placed)){const p=pieces.find(x=>x.id===id);if(!p)continue;const im=image(p.file).cloneNode();im.className='piece'+(selectedPiece===id?' selected':'');im.dataset.id=id;im.draggable=false;im.style.cssText=`left:${at.x*100}%;top:${at.y*100}%;width:${p.w*100}%;height:${p.h*100}%`;im.onpointerdown=e=>pieceDown(e,box,id);box.append(im)}if(mode==='pen'){const c=el('canvas','penCanvas');c.width=c.height=512;c.dataset.qi=qi;box.append(c);drawCanvas(c,qi)}box.append(el('span','mark'));box.onpointerdown=e=>squareDown(e,box);wrap.append(box);if(!zoom)wrap.append(el('span','reading',questions[qi].reading));return wrap}
 function returnTarget(){if(selectedPiece&&locate(selectedPiece)>=0)return selectedPiece;if(lastPlacedPiece&&locate(lastPlacedPiece)===active)return lastPlacedPiece;const ids=Object.keys(states[active]?.placed||{});return ids.length?ids[ids.length-1]:null}
-function renderLesson(){const paper=$('#paper'),shown=visible();paper.replaceChildren();paper.dataset.count=shown.length;for(const {q,qi} of shown){const col=el('div','question');col.append(el('div','num',String(qi+1)),el('div','vertical',q.text.slice(0,q.index)),makeSquare(qi),el('div','vertical',q.text.slice(q.index+1)));paper.append(col)}$('#pageLabel').textContent=(page+1)+' / '+Math.ceil(questions.length/perPage);$('#prev').disabled=page===0;$('#next').disabled=page>=Math.ceil(questions.length/perPage)-1;$('#check').disabled=states[active]?.done;$('#returnPiece').disabled=states[active]?.done||!returnTarget();$('#hintButton').hidden=mode!=='pen';$('#hintButton').textContent=hintShown?'ヒントをかくす':'ヒントを表示';$('#undoPen').hidden=mode!=='pen';renderBank($('#tiles'));requestAnimationFrame(fit)}
+function renderLesson(){const paper=$('#paper'),shown=visible();paper.replaceChildren();paper.dataset.count=shown.length;for(const {q,qi} of shown){const col=el('div','question');col.append(el('div','num',String(qi+1)),el('div','vertical',q.text.slice(0,q.index)),makeSquare(qi),el('div','vertical',q.text.slice(q.index+1)));paper.append(col)}$('#pageLabel').textContent=(page+1)+' / '+Math.ceil(questions.length/perPage);$('#prev').disabled=page===0;$('#next').disabled=page>=Math.ceil(questions.length/perPage)-1;$('#check').disabled=states[active]?.done;$('#returnPiece').disabled=states[active]?.done||!returnTarget();$('#hintButton').hidden=mode!=='pen';$('#hintButton').textContent=hintShown?'ヒントをかくす':'ヒントを表示';$('#undoPen').hidden=$('#resetPen').hidden=mode!=='pen';renderBank($('#tiles'));requestAnimationFrame(fit)}
 function fit(){
   const paper=$('#paper'), columns=[...paper.querySelectorAll('.question')];
   if(!paper.clientWidth||!columns.length)return;
@@ -359,7 +425,20 @@ function renderTree(){
 }
 function renderRecords(){show('records');const tabs=$('#recordTabs');tabs.replaceChildren();for(const [index,[id,p]] of profileEntries().entries()){const b=el('button','record'+(saved.active===id?' chosen':''));b.append(artIcon('recordVisual', ['rabbit','bear','bird'][p.avatar ?? index%3]),el('span','recordName',p.name));b.onclick=()=>{saved.active=id;persist();renderRecords()};tabs.append(b)}const p=profile(),stats=$('#recordStats'),body=$('#historyBody');body.replaceChildren();if(!p){stats.textContent='記録する人が登録されていません。'}else{stats.textContent=`${p.name}　取り組み ${p.attempts.length}回　もう一度 ${p.retry.length}字`;for(const a of p.attempts){const tr=el('tr'),detail=a.month||a.title||methodName(a.method),chars=(a.chars||[]).join('・')||'―';for(const t of [new Date(a.date).toLocaleDateString('ja-JP'),detail,chars,({parts:'組み立て',whole:'完成形',pen:'書く'})[a.mode]||a.mode,(a.count||a.chars?.length||0)+'字'])tr.append(el('td','',t));body.append(tr)}}const select=$('#deleteProfileSelect');select.replaceChildren();for(const [id,item] of profileEntries()){const option=el('option','',item.name);option.value=id;select.append(option)}select.value=saved.active||'';select.disabled=!profileEntries().length;$('#clearRecord').disabled=!profileEntries().length;setRecordView(recordView)}
 function deleteSelectedProfile(){if(clearProfileRecord($('#deleteProfileSelect').value))renderRecords()}
-$('#coverImage').src=COVER_IMAGE;$('#coverStart').onclick=renderHome;$$('[data-home]').forEach(b=>b.onclick=renderHome);$('#addProfile').onclick=addProfile;$('#renameProfile').onclick=renameActiveProfile;$('#eraseHomeRecord').onclick=()=>{if(clearProfileRecord(saved.active))renderHome()};$('#profileNameInput').onkeydown=e=>{if(e.key==='Enter')addProfile()};$('#recordsButton').onclick=renderRecords;$('#settingsBack').onclick=()=>openMethod(currentMethod);$('#start').onclick=begin;$('#lessonSettings').onclick=()=>show('settings');$('#lessonBack').onclick=()=>openMethod(currentMethod);$('#prev').onclick=()=>{page--;active=page*perPage;renderLesson()};$('#next').onclick=()=>{page++;active=page*perPage;renderLesson()};$('#check').onclick=check;$('#returnPiece').onclick=returnPiece;$('#resetButton').onclick=reset;$('#hintButton').onclick=()=>{hintShown=!hintShown;renderAll()};$('#undoPen').onclick=undo;$('#zoomButton').onclick=openZoom;$('#closeZoom').onclick=()=>$('#zoom').close();$('#zoom').addEventListener('close',()=>{if(!$('#lesson').hidden)renderLesson()});$('#zoomReturn').onclick=returnPiece;$('#zoomReset').onclick=reset;$('#zoomCheck').onclick=check;$('#resultHome').onclick=renderHome;$('#retryNow').onclick=()=>{const list=profile()?.retry||[];list.length?openSettings(list,'もう一度'):renderHome()};$('#listViewButton').onclick=()=>setRecordView('list');$('#treeViewButton').onclick=()=>setRecordView('tree');$('#treeZoomIn').onclick=()=>zoomTree(.35);$('#treeZoomOut').onclick=()=>zoomTree(-.35);$('#treeReset').onclick=resetTree;$('#clearRecord').onclick=deleteSelectedProfile;bindTreeGestures();window.addEventListener('resize',fit);window.visualViewport?.addEventListener('resize',fit);new ResizeObserver(fit).observe($('#paper'));show('cover');
+$('#coverImage').src=COVER_IMAGE;$('#coverStart').onclick=renderHome;$$('[data-home]').forEach(b=>b.onclick=renderHome);$('#addProfile').onclick=()=>editProfile(null);
+$('#renameProfile').onclick=()=>editProfile(saved.active);
+$('#profileEditor').onsubmit=saveProfileName;
+$('#cancelProfileEdit').onclick=closeProfileEditor;
+$('#eraseHomeRecord').onclick=()=>{
+  if(!profile())return;
+  closeProfileEditor();
+  $('#profileEraseMessage').textContent=`「${profile().name}」の学習記録をすべて消しますか？`;
+  $('#profileEraseConfirm').hidden=false;
+};
+$('#cancelProfileErase').onclick=()=>{$('#profileEraseConfirm').hidden=true};
+$('#confirmProfileErase').onclick=()=>{if(clearProfileRecord(saved.active,true))renderHome()};
+$('#resetPen').onclick=reset;
+$('#recordsButton').onclick=renderRecords;$('#settingsBack').onclick=()=>openMethod(currentMethod);$('#start').onclick=begin;$('#lessonSettings').onclick=()=>show('settings');$('#lessonBack').onclick=()=>openMethod(currentMethod);$('#prev').onclick=()=>{page--;active=page*perPage;renderLesson()};$('#next').onclick=()=>{page++;active=page*perPage;renderLesson()};$('#check').onclick=check;$('#returnPiece').onclick=returnPiece;$('#resetButton').onclick=reset;$('#hintButton').onclick=()=>{hintShown=!hintShown;renderAll()};$('#undoPen').onclick=undo;$('#zoomButton').onclick=openZoom;$('#closeZoom').onclick=()=>$('#zoom').close();$('#zoom').addEventListener('close',()=>{if(!$('#lesson').hidden)renderLesson()});$('#zoomReturn').onclick=returnPiece;$('#zoomReset').onclick=reset;$('#zoomCheck').onclick=check;$('#resultHome').onclick=renderHome;$('#retryNow').onclick=()=>{const list=profile()?.retry||[];list.length?openSettings(list,'もう一度'):renderHome()};$('#listViewButton').onclick=()=>setRecordView('list');$('#treeViewButton').onclick=()=>setRecordView('tree');$('#treeZoomIn').onclick=()=>zoomTree(.35);$('#treeZoomOut').onclick=()=>zoomTree(-.35);$('#treeReset').onclick=resetTree;$('#clearRecord').onclick=deleteSelectedProfile;bindTreeGestures();window.addEventListener('resize',fit);window.visualViewport?.addEventListener('resize',fit);new ResizeObserver(fit).observe($('#paper'));show('cover');
 $('#groupCharsToggle').onclick=toggleGroupChars;
 </script>
 </body>
