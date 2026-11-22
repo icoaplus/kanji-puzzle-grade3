@@ -73,7 +73,8 @@
 .question { gap:7px; min-height:0 }
 .question > * { flex:none }
 .question > .vertical:empty { display:none }
-#paper .vertical,#paper .reading { font-size:var(--paper-text,clamp(15px,1.8vw,23px)) }
+#paper .vertical { font-size:var(--paper-text,28px); font-weight:400; white-space:nowrap }
+#paper .reading { font-size:var(--reading-text,21px); line-height:1.05 }
 #paper .reading { left:calc(100% + 9px) }
 #zoom[open] { position:fixed; inset:0; margin:auto; box-sizing:border-box;
   width:min(var(--zoom-width,96vw),1100px); height:var(--zoom-height,92dvh);
@@ -379,7 +380,12 @@ function fit(){
   const longest=Math.max(1,...questions.map(q=>q.text.length-1));
   const preferred=Math.min(255,height*.60,width-48);
   const box=Math.floor(Math.max(32,Math.min(preferred,height-70-longest*10)));
-  const font=Math.max(10,Math.min(23,innerWidth*.018,(height-box-70)/longest));
+  const visibleQuestions=visible();
+  const sentenceLength=Math.max(1,...visibleQuestions.map(({q})=>q.text.length-1));
+  const readingLength=Math.max(1,...visibleQuestions.map(({q})=>q.reading.length));
+  const font=Math.max(1,Math.min(30,paper.clientWidth*.028,(height-box-76)/(sentenceLength*1.05)));
+  const readingFont=Math.max(1,Math.min(23,innerWidth*.018,(width-box)/2-11,(box-8)/(readingLength*1.05)));
+  paper.style.setProperty('--reading-text',readingFont+'px');
   paper.style.setProperty('--paper-text',font+'px');
   paper.style.setProperty('--box',box+'px');
   fitTileBank();
