@@ -181,13 +181,36 @@ html.lesson-open,html.lesson-open body { overflow:hidden; overscroll-behavior:no
 #zoom .zoomActions { gap:clamp(4px,2dvh,18px); overflow:auto }
 #closeZoom { justify-self:end; min-width:80px }
 </style>
-</head>
+<style>
+#lesson .work { grid-template-columns:minmax(0,1fr) clamp(104px,11vw,154px); padding-bottom:calc(6px + env(safe-area-inset-bottom,0px)); }
+.lessonMain { display:flex; flex-direction:column; min-width:0; min-height:0; }
+.lessonMain .paper { flex:1; min-height:0; }
+#lesson .bank { margin:0; min-height:clamp(54px,11dvh,88px); }
+#lesson .side { min-height:0; justify-content:flex-start; gap:clamp(3px,1dvh,10px); overflow:auto; touch-action:pan-y; }
+#lesson .side button { width:100%; min-height:clamp(28px,5dvh,48px); padding:3px 4px; font-size:clamp(12px,1.45vw,17px); line-height:1.18; }
+#lesson .side .solveModes,#lesson .side .solveActions,#lessonPiecePool { display:grid; gap:clamp(3px,.65dvh,6px); }
+#lessonPiecePool { padding-left:6px; }
+#lesson .side button[aria-pressed="true"] { background:#d7eff8; border-color:var(--blue); }
+#lesson .side .reviewActions { margin:0; gap:3px; }
+#lesson .side .lessonRetry { gap:3px; }
+#lesson .side .lessonRetry img { width:clamp(20px,4dvh,34px); height:auto; }
+#lesson .side #lessonApple { font-size:clamp(11px,1.35vw,16px); }
+#lesson .side #check { margin-top:auto; min-height:clamp(34px,6dvh,56px); flex-shrink:0; }
+</style></head>
 <body>
 <section id="cover" class="screen cover"><main class="coverCard"><h1>かんじパズル　３年生</h1><div class="coverArt" aria-label="大きく育った3年生の木"><img id="coverImage" alt="大きな木ときつねとカードのイラスト"></div><button id="coverStart" class="coverStart">はじめる</button></main></section>
 <section id="home" class="screen" hidden><div class="hero"><div class="card"><div class="homeTitle"><h1>かんじパズル　３年生</h1></div><div id="recordGrid" class="recordGrid"></div><div id="profileActions" class="profileActions"><button id="addProfile">記録を追加</button><button id="renameProfile">名前を変更</button><button id="eraseHomeRecord">記録を消去</button></div><form id="profileEditor" class="profileEntry" hidden><div id="avatarPicker" role="group" aria-label="キャラクター"></div><input id="profileNameInput" aria-label="名前" maxlength="20" placeholder="名前を入力" required><button class="primary" type="submit">保存</button><button id="cancelProfileEdit" type="button">キャンセル</button></form><div id="profileEraseConfirm" class="profileActions" hidden><span id="profileEraseMessage"></span><button id="confirmProfileErase">消去する</button><button id="cancelProfileErase">キャンセル</button></div><div id="methodGrid" class="methodGrid"></div><div id="summary" class="summary"></div></div></div></section>
 <section id="groups" class="screen" hidden><header class="top"><button data-home>← もどる</button><h1 id="groupsTitle"></h1><button id="groupCharsToggle" class="charsToggle" hidden>漢字を表示</button><span class="spacer"></span><button id="recordsButton">きろくを見る</button></header><div id="groupControls"></div><main id="groupContent"></main></section>
 <section id="settings" class="screen" hidden><div class="settings card"><button id="settingsBack">← 選びなおす</button><h2 id="settingsTitle"></h2><p id="settingsCount"></p><div class="settingsGrid"><fieldset><legend>取り組み方</legend><div class="options"><label><input type="radio" name="mode" value="parts" checked>組み立てる</label><label><input type="radio" name="mode" value="whole">完成形</label><label><input type="radio" name="mode" value="pen">書く</label></div></fieldset><fieldset id="pieceOptions"><legend>部品の出し方</legend><div class="options"><label><input type="radio" name="piecePool" value="own">この問題の部品だけ</label><label><input type="radio" name="piecePool" value="mixed" checked>ほかの問題の部品もまぜる</label></div><div id="mixOptions"><label for="mixCount">部品の数（全部で）</label> <select id="mixCount"><option value="3">3こ</option><option value="4">4こ</option><option value="5">5こ</option><option value="6">6こ</option><option value="7">7こ</option><option value="8">8こ</option><option value="9">9こ</option><option value="10" selected>10こ</option></select><div>必要な部品はすべて出ます。</div></div></fieldset><fieldset><legend>読み方</legend><div id="readingOptions" class="options"></div></fieldset><fieldset><legend>1ページに表示する問題数</legend><div class="options"><label><input type="radio" name="perPage" value="1">1問</label><label><input type="radio" name="perPage" value="2">2問</label><label><input type="radio" name="perPage" value="3">3問</label><label><input type="radio" name="perPage" value="4">4問</label><label><input type="radio" name="perPage" value="5" checked>5問</label></div></fieldset><fieldset><legend>判定</legend><div class="options"><label><input type="radio" name="judge" value="easy">やさしい</label><label><input type="radio" name="judge" value="normal" checked>ふつう</label></div></fieldset></div><button id="start" class="primary startBtn">はじめる</button></div></section>
-<section id="lesson" class="screen lesson" hidden><header class="bar"><strong id="lessonMonth" hidden></strong><button id="lessonBack">📜 もくじ</button><span class="barGap"></span><button id="prev">⬅️まえ</button><span id="pageLabel" class="page"></span><button id="next">つぎ➡️</button><button id="resetButton" aria-label="やりなおす">↶</button><button id="zoomButton" aria-label="拡大"><span class="zoomIcon" aria-hidden="true"><small>↖</small><small>↗</small><b>大</b><small>↙</small><small>↘</small></span></button><button id="lessonSettings">⚙️設定</button></header><div class="work"><main id="paper" class="paper"></main><aside class="side"><span id="lessonApple"></span><div class="reviewActions"><label class="lessonRetry"><input type="checkbox" id="lessonRetry"><img class="retryArt" alt=""><span>もう一度</span></label><button class="skip" id="lessonSkip">スキップ</button></div><button id="returnPiece">↩️ 部品を<br>もどす</button><button id="check" class="primary">できた！</button></aside></div><div id="lessonReward" hidden></div><p id="feedback" class="feedback"></p><div class="bank"><button id="hintButton" hidden>ヒントを表示</button><button id="undoPen" hidden>ひとつもどす</button><button id="resetPen" hidden>やりなおす</button><div id="tiles" class="tiles"></div></div></section>
+<section id="lesson" class="screen lesson" hidden><header class="bar"><strong id="lessonMonth" hidden></strong><button id="lessonBack">📜 もくじ</button><span class="barGap"></span><button id="prev">⬅️まえ</button><span id="pageLabel" class="page"></span><button id="next">つぎ➡️</button><button id="resetButton" aria-label="やりなおす">↶</button><button id="zoomButton" aria-label="拡大"><span class="zoomIcon" aria-hidden="true"><small>↖</small><small>↗</small><b>大</b><small>↙</small><small>↘</small></span></button><button id="lessonSettings">⚙️設定</button></header><div class="work"><div class="lessonMain"><main id="paper" class="paper"></main><p id="feedback" class="feedback"></p><div class="bank"><div id="tiles" class="tiles"></div></div></div><aside class="side"><span id="lessonApple"></span><div class="solveModes" role="group" aria-label="取り組み方">
+<button type="button" data-solve="parts">組み立てる</button>
+<div id="lessonPiecePool" role="group" aria-label="部品の範囲">
+<button type="button" data-pool="own">この問題だけ</button>
+<button type="button" data-pool="mixed">ほかの問題も</button>
+</div>
+<button type="button" data-solve="whole">完成形</button>
+<button type="button" data-solve="pen">書く</button>
+</div><div class="reviewActions"><label class="lessonRetry"><input type="checkbox" id="lessonRetry"><img class="retryArt" alt=""><span>もう一度</span></label><button class="skip" id="lessonSkip">スキップ</button></div><div class="solveActions"><button id="returnPiece">↩️ もどす</button><button id="hintButton" hidden>ヒントを表示</button><button id="undoPen" hidden>ひとつもどす</button><button id="resetPen" hidden>やりなおす</button></div><button id="check" class="primary">できた！</button></aside></div><div id="lessonReward" hidden></div></section>
 <section id="result" class="screen" hidden><main class="results card"><h1>学習のきろく</h1><p id="resultSummary"></p><div id="resultChars" class="resultChars"></div><div class="choiceBar"><button id="resultHome" class="primary">もくじへ</button><button id="retryNow">チェックした漢字をもう一度</button></div><div id="resultReward" class="appleReward"></div></main></section>
 <section id="records" class="screen" hidden><header class="top"><button data-home>← もどる</button><h1 id="recordsTitle">きろく</h1></header><main class="records card"><div class="recordTabsWrap"><div id="recordTabs" class="recordGrid"></div></div><div id="recordsReward" class="appleReward" hidden></div><div id="recordStats" class="summary"></div><div class="recordViewSwitch"><button id="listViewButton" class="active"><ruby>一覧<rt>いちらん</rt></ruby></button><button id="treeViewButton">漢字の木</button><button id="recordRetry" hidden></button></div><div id="historyWrap" class="historyWrap"><table class="history"><thead><tr><th>日</th><th>月・内容</th><th>漢字</th><th>モード</th><th>字数</th></tr></thead><tbody id="historyBody"></tbody></table></div><div id="treeWrap" class="treeWrap" hidden><div class="treeLegend"><span><i class="leafKey" style="background:#dce98d"></i>未学習</span><span><i class="leafKey" style="background:#76ad59"></i>学習済み</span><span><i class="leafKey" style="background:#ad6048"></i>もう一度</span></div><div class="treeToolbar"><button id="treeZoomOut" aria-label="縮小">－</button><button id="treeReset">木全体</button><button id="treeZoomIn" aria-label="拡大">＋</button></div><div id="treeViewport" class="treeViewport"><div id="treeCanvas" class="treeCanvas"></div></div><p class="treeHelp">指2本で拡大・縮小。拡大後は指やマウスで移動できます。</p></div><div class="deleteControls"><label for="deleteProfileSelect">消す記録</label><select id="deleteProfileSelect"></select><button id="clearRecord">選んだ記録を消す</button></div></main></section>
 <dialog class="lessonZoom" id="zoom"><header class="zoomTop"><h2 id="zoomTitle"></h2><button id="closeZoom">もどる</button></header><div class="zoomBody"><div id="zoomStage" class="zoomStage"></div><aside class="zoomActions"><div class="reviewActions"><label class="lessonRetry"><input type="checkbox" id="zoomRetry"><img class="retryArt" alt=""><span>もう一度</span></label><button class="skip" id="zoomSkip">スキップ</button></div><button id="zoomReturn">部品をもどす</button><button id="zoomReset">やりなおす</button><button id="zoomCheck" class="primary">できた！</button></aside></div><p id="zoomFeedback" class="feedback"></p><div id="zoomBank" class="zoomBank"></div></dialog>
@@ -415,13 +438,72 @@ function syncPieceOptions(){
   $('#mixOptions').hidden=$('input[name=piecePool]:checked').value!=='mixed';
 }
 let pieceLimit=10;
-function begin(){pieceLimit=$('input[name=piecePool]:checked').value==='mixed'?Number($('#mixCount').value):0;mode=$('input[name=mode]:checked').value;reading=$('input[name=reading]:checked')?.value||'1';perPage=Number($('input[name=perPage]:checked').value);judge=$('input[name=judge]:checked').value;questions=selectedChars.filter(c=>DATA.questions[c]?.[reading]).map(c=>({...DATA.questions[c][reading],char:c}));states=questions.map(()=>({placed:{},strokes:[],done:false}));pieces=[];questions.forEach((q,qi)=>{const list=mode==='whole'?[DATA.parts[q.char].full]:DATA.parts[q.char].parts;list.forEach((p,pi)=>pieces.push({id:qi+'-'+pi,home:qi,pi,file:p[0],x:p[1],y:p[2],w:p[3],h:p[4]}))});page=0;active=0;selectedPiece=null;lastPlacedPiece=null;hintShown=false;sessionSaved=false;setFeedback('');const month=$('#lessonMonth');month.hidden=!/^[0-9]+月/.test(selectionTitle) || !['A','B'].includes(currentMethod);month.textContent=month.hidden?'':selectionTitle;show('lesson');renderLesson()}
+let lessonPages=[];
+function buildPieces(){
+  pieces=[];questions.forEach((q,qi)=>{const list=mode==='whole'?[DATA.parts[q.char].full]:DATA.parts[q.char].parts;list.forEach((p,pi)=>pieces.push({id:qi+'-'+pi,home:qi,pi,file:p[0],x:p[1],y:p[2],w:p[3],h:p[4]}))});
+}
+function syncSolveMenu(){
+  document.querySelectorAll('[data-solve]').forEach(button=>
+    button.setAttribute('aria-pressed',button.dataset.solve===mode));
+  document.querySelectorAll('[data-pool]').forEach(button=>
+    button.setAttribute('aria-pressed',(button.dataset.pool==='mixed')===(pieceLimit>0)));
+  $('#lessonPiecePool').hidden=mode==='pen';
+  $('#returnPiece').hidden=mode==='pen';
+  $('#returnPiece').innerHTML=mode==='whole'?'↩️ もどす':'↩️ 部品を<br>もどす';
+}
+function switchSolveMode(nextMode){
+  if(nextMode===mode || pointer || states.some(state=>state.checking))return;
+  for(const state of states){
+    state.placementsByMode ??= {};
+    state.placementsByMode[mode]=state.placed;
+    state.placed=state.placementsByMode[nextMode] ?? {};
+  }
+  mode=nextMode;
+  $('input[name=mode][value='+mode+']').checked=true;
+  syncPieceOptions();
+  buildPieces();
+  hintShown=false;
+  selectedPiece=lastPlacedPiece=null;
+  setFeedback('');
+  renderAll();
+}
+function changePiecePool(mixed){
+  if(pointer || states.some(state=>state.checking))return;
+  pieceLimit=mixed?Number($('#mixCount').value):0;
+  $('input[name=piecePool][value='+(mixed?'mixed':'own')+']').checked=true;
+  syncPieceOptions();
+  selectedPiece=null;
+  renderAll();
+}
+function begin(){pieceLimit=$('input[name=piecePool]:checked').value==='mixed'?Number($('#mixCount').value):0;mode=$('input[name=mode]:checked').value;reading=$('input[name=reading]:checked')?.value||'1';perPage=Number($('input[name=perPage]:checked').value);judge=$('input[name=judge]:checked').value;questions=selectedChars.filter(c=>DATA.questions[c]?.[reading]).map(c=>({...DATA.questions[c][reading],char:c}));lessonPages=groupLessonPages();states=questions.map(()=>({placed:{},strokes:[],done:false}));buildPieces();page=0;active=0;selectedPiece=null;lastPlacedPiece=null;hintShown=false;sessionSaved=false;setFeedback('');const month=$('#lessonMonth');month.hidden=!/^[0-9]+月/.test(selectionTitle) || !['A','B'].includes(currentMethod);month.textContent=month.hidden?'':selectionTitle;show('lesson');renderLesson()}
 function isPending(state){return state && !state.done && !state.skipped}
-function visible(){const start=page*perPage;return questions.slice(start,start+perPage).map((q,i)=>({q,qi:start+i}))}
+function conflictingQuestions(left,right){
+  const shownText=question=>question.text.slice(0,question.index)+question.text.slice(question.index+1);
+  return shownText(left).includes(right.char) || shownText(right).includes(left.char) ||
+    [].some(group=>group.includes(left.char)&&group.includes(right.char));
+}
+function groupLessonPages(){
+  const groups=[];
+  questions.forEach((question,index)=>{
+    let group=groups.find(indices=>indices.length<perPage &&
+      indices.every(other=>!conflictingQuestions(question,questions[other])));
+    if(!group){group=[];groups.push(group);}
+    group.push(index);
+  });
+  questions=groups.flat().map(index=>questions[index]);
+  let start=0;
+  return groups.map(group=>{
+    const indices=group.map((_,offset)=>start+offset);
+    start+=group.length;
+    return indices;
+  });
+}
+function visible(){return (lessonPages[page]??[]).map(qi=>({q:questions[qi],qi}));}
+function pageForQuestion(qi){return lessonPages.findIndex(indices=>indices.includes(qi));}
 function prompt(q){const line=el('div','zoomPrompt'),ruby=el('ruby'),blank=el('span','zoomBlank','□'),rt=el('rt','',q.reading);ruby.append(blank,rt);line.append(document.createTextNode(q.text.slice(0,q.index)),ruby,document.createTextNode(q.text.slice(q.index+1)));return line}
-function makeSquare(qi,zoom=false){const st=states[qi],wrap=el('div','squareWrap'),box=el('div','square'+(qi===active?' active':'')+(st.done?' done':''));box.dataset.qi=qi;box.dataset.zoom=zoom?'1':'0';box.append(el('span','guide'));if(st.done&&mode!=='pen'){const [file,x,y,w,h]=DATA.parts[questions[qi].char].full;const glyph=image(file).cloneNode();glyph.style.cssText=`left:${x*100}%;top:${y*100}%;width:${w*100}%;height:${h*100}%`;glyph.className='completedGlyph';glyph.alt=questions[qi].char;box.append(glyph)}for(const [id,at] of Object.entries(st.done&&mode!=='pen'?{}:st.placed)){const p=pieces.find(x=>x.id===id);if(!p)continue;const im=image(p.file).cloneNode();im.className='piece'+(selectedPiece===id?' selected':'');im.dataset.id=id;im.draggable=false;im.style.cssText=`left:${at.x*100}%;top:${at.y*100}%;width:${p.w*100}%;height:${p.h*100}%`;im.onpointerdown=e=>pieceDown(e,box,id);box.append(im)}if(mode==='pen'){const c=el('canvas','penCanvas');c.width=c.height=512;c.dataset.qi=qi;box.append(c);drawCanvas(c,qi)}box.append(el('span','mark'));if(st.skipped)box.append(el('span','skippedLabel','スキップ'));box.onpointerdown=e=>squareDown(e,box);wrap.append(box);if(!zoom)wrap.append(el('span','reading',questions[qi].reading));return wrap}
+function makeSquare(qi,zoom=false){const st=states[qi],wrap=el('div','squareWrap'),box=el('div','square'+(qi===active?' active':'')+(st.done?' done':''));box.dataset.qi=qi;box.dataset.zoom=zoom?'1':'0';box.append(el('span','guide'));if(st.done&&(mode!=='pen'||!st.strokes.length)){const [file,x,y,w,h]=DATA.parts[questions[qi].char].full;const glyph=image(file).cloneNode();glyph.style.cssText=`left:${x*100}%;top:${y*100}%;width:${w*100}%;height:${h*100}%`;glyph.className='completedGlyph';glyph.alt=questions[qi].char;box.append(glyph)}for(const [id,at] of Object.entries(st.done&&(mode!=='pen'||!st.strokes.length)?{}:st.placed)){const p=pieces.find(x=>x.id===id);if(!p)continue;const im=image(p.file).cloneNode();im.className='piece'+(selectedPiece===id?' selected':'');im.dataset.id=id;im.draggable=false;im.style.cssText=`left:${at.x*100}%;top:${at.y*100}%;width:${p.w*100}%;height:${p.h*100}%`;im.onpointerdown=e=>pieceDown(e,box,id);box.append(im)}if(mode==='pen'&&(!st.done||st.strokes.length)){const c=el('canvas','penCanvas');c.width=c.height=512;c.dataset.qi=qi;box.append(c);drawCanvas(c,qi)}box.append(el('span','mark'));if(st.skipped)box.append(el('span','skippedLabel','スキップ'));box.onpointerdown=e=>squareDown(e,box);wrap.append(box);if(!zoom)wrap.append(el('span','reading',questions[qi].reading));return wrap}
 function returnTarget(){if(selectedPiece&&locate(selectedPiece)>=0&&!states[locate(selectedPiece)].done)return selectedPiece;if(lastPlacedPiece&&locate(lastPlacedPiece)===active)return lastPlacedPiece;const ids=Object.keys(states[active]?.placed||{});return ids.length?ids[ids.length-1]:null}
-function renderLesson(){updateAppleProgress();const paper=$('#paper'),shown=visible();paper.replaceChildren();paper.dataset.count=perPage;for(const {q,qi} of shown){const col=el('div','question');col.append(el('div','num',String(qi+1)),el('div','vertical',q.text.slice(0,q.index)),makeSquare(qi),el('div','vertical verticalAfter',q.text.slice(q.index+1)));paper.append(col)}for(let i=shown.length;i<5;i++){const slot=el('div','question');slot.setAttribute('aria-hidden','true');paper.append(slot)}$('#pageLabel').textContent=(page+1)+' / '+Math.ceil(questions.length/perPage);$('#prev').disabled=page===0;$('#next').disabled=page>=Math.ceil(questions.length/perPage)-1;$('#check').disabled=states[active]?.done;$('#returnPiece').disabled=states[active]?.done||!returnTarget();$('#hintButton').hidden=mode!=='pen';$('#hintButton').textContent=hintShown?'ヒントをかくす':'ヒントを表示';$('#undoPen').hidden=$('#resetPen').hidden=mode!=='pen';renderBank($('#tiles'));syncLessonRetry();requestAnimationFrame(fit)}
+function renderLesson(){syncSolveMenu();updateAppleProgress();const paper=$('#paper'),shown=visible();paper.replaceChildren();paper.dataset.count=perPage;for(const {q,qi} of shown){const col=el('div','question');col.append(el('div','num',String(qi+1)),el('div','vertical',q.text.slice(0,q.index)),makeSquare(qi),el('div','vertical verticalAfter',q.text.slice(q.index+1)));paper.append(col)}for(let i=shown.length;i<5;i++){const slot=el('div','question');slot.setAttribute('aria-hidden','true');paper.append(slot)}$('#pageLabel').textContent=(page+1)+' / '+lessonPages.length;$('#prev').disabled=page===0;$('#next').disabled=page>=lessonPages.length-1;$('#check').disabled=states[active]?.done;$('#returnPiece').disabled=states[active]?.done||!returnTarget();$('#hintButton').hidden=mode!=='pen';$('#hintButton').textContent=hintShown?'ヒントをかくす':'ヒントを表示';$('#undoPen').hidden=$('#resetPen').hidden=mode!=='pen';$('#undoPen').disabled=states[active]?.done||!states[active]?.strokes.length;$('#resetPen').disabled=states[active]?.done;renderBank($('#tiles'));syncLessonRetry();requestAnimationFrame(fit)}
 function fit(){
   const paper=$('#paper'), columns=[...paper.querySelectorAll('.question')];
   if(!paper.clientWidth||!columns.length)return;
@@ -445,14 +527,15 @@ function fit(){
   if($('#zoom').open)fitZoom();
 }
 function pagePieces(){
-  if(mode==='pen'&&!hintShown)return [];
+  if(mode==='pen')return hintShown ? pieces.filter(piece=>piece.home===active) : [];
   const visibleIds=new Set(visible().map(({qi})=>qi));
-  if(mode!=='parts')return pieces.filter(piece=>visibleIds.has(piece.home));
+  if(mode==='whole')return pieces.filter(piece=>pieceLimit ? visibleIds.has(piece.home) : piece.home===active);
   const placed=states[active]?.placed||{};
   const required=pieces.filter(piece=>piece.home===active||Object.hasOwn(placed,piece.id));
   const available=pieces.filter(piece=>!required.includes(piece)&&locate(piece.id)<0);
   const extras=[...available.filter(piece=>visibleIds.has(piece.home)),
-    ...available.filter(piece=>!visibleIds.has(piece.home))];
+    ...available.filter(piece=>!visibleIds.has(piece.home) &&
+      !conflictingQuestions(questions[active],questions[piece.home]))];
   const bank=new Set([...required,...extras.slice(0,Math.max(0,pieceLimit-required.length))]);
   return pieces.filter(piece=>bank.has(piece));
 }
@@ -610,6 +693,7 @@ function skipQuestion(){
   const qi=active, state=states[qi];
   if(!profile() || !isPending(state) || state.checking)return;
   state.skipped=true;
+  state.placementsByMode={};
   state.placed={};
   state.strokes=[];
   setRetry(questions[qi].char,true);
@@ -629,13 +713,13 @@ function advanceQuestion(qi,skipped,earned=false){
   const next=states.findIndex((state,index)=>index>qi && isPending(state));
   if(skipped){
     active=next<0?first:next;
-    page=Math.floor(active/perPage);
+    page=pageForQuestion(active);
   }else{
     const onPage=visible().find(({qi:index})=>isPending(states[index]));
     if(onPage)active=onPage.qi;
     else if(['A','B'].includes(currentMethod)){
       active=next<0?first:next;
-      page=Math.floor(active/perPage);
+      page=pageForQuestion(active);
     }
   }
   renderLesson();
@@ -738,7 +822,7 @@ function renderResult(earned=false){renderAppleReward($('#resultReward'),earned)
   $('#resultSummary').textContent=unit+(sessionSaved
   ? '今回の取り組みを1回として記録しました。もう一度学ぶ漢字にチェックできます。'
   : 'スキップした漢字には「もう一度」のチェックが入っています。');const out=$('#resultChars');out.replaceChildren();const retry=new Set(profile().retry);for(const [index,q] of questions.entries()){const label=el('label','retryCheck'),box=el('input');box.type='checkbox';box.checked=retry.has(q.char);box.onchange=()=>{setRetry(q.char,box.checked)};label.append(box,document.createTextNode(q.char));if(states[index].skipped)label.append(el('small','','スキップ'));out.append(label)}}
-function returnPiece(){const id=returnTarget();if(!id)return;const qi=locate(id);if(qi>=0)delete states[qi].placed[id];if(lastPlacedPiece===id)lastPlacedPiece=null;if(selectedPiece===id)selectedPiece=null;renderAll()}function reset(){states[active]={placed:{},strokes:[],done:false,appleCredited:states[active].appleCredited};selectedPiece=null;lastPlacedPiece=null;setFeedback('');renderAll()}function undo(){states[active].strokes.pop();renderAll()}
+function returnPiece(){const id=returnTarget();if(!id)return;const qi=locate(id);if(qi>=0)delete states[qi].placed[id];if(lastPlacedPiece===id)lastPlacedPiece=null;if(selectedPiece===id)selectedPiece=null;renderAll()}function reset(){states[active]={placed:{},strokes:[],done:false,appleCredited:states[active].appleCredited};selectedPiece=null;lastPlacedPiece=null;setFeedback('');renderAll()}function undo(){if(!states[active].done&&!states[active].checking)states[active].strokes.pop();renderAll()}
 function openZoom(){if(!questions[active]||$('#zoom').open)return;$('#zoomTitle').textContent=(active+1)+'問目';const stage=$('#zoomStage');stage.replaceChildren(prompt(questions[active]),makeSquare(active,true));renderBank($('#zoomBank'));$('#zoomReturn').disabled=states[active]?.done||!returnTarget();$('#zoomCheck').disabled=states[active]?.done;$('#zoom').showModal();requestAnimationFrame(fitZoom)}function fitZoom(){
   const dialog=$('#zoom'), area=$('#zoomStage'), bank=$('#zoomBank');
   const viewport=window.visualViewport;
@@ -849,14 +933,26 @@ $('#eraseHomeRecord').onclick=()=>{
 };
 $('#cancelProfileErase').onclick=()=>{$('#profileEraseConfirm').hidden=true};
 $('#confirmProfileErase').onclick=()=>{if(clearProfileRecord(saved.active,true))renderHome()};
-$('#resetPen').onclick=reset;
+document.querySelectorAll('[data-solve]').forEach(button=>
+  button.onclick=()=>switchSolveMode(button.dataset.solve));
+document.querySelectorAll('[data-pool]').forEach(button=>
+  button.onclick=()=>changePiecePool(button.dataset.pool==='mixed'));
+$('#resetPen').onclick=()=>{
+  const state=states[active];
+  if(state.done||state.checking)return;
+  state.strokes=[];
+  state.placed={};
+  selectedPiece=lastPlacedPiece=null;
+  setFeedback('');
+  renderAll();
+};
 for(const id of ['#lessonRetry','#zoomRetry']){
   $(id).onchange=event=>{
     setRetry(questions[active]?.char,event.currentTarget.checked);
     syncLessonRetry();
   };
 }
-$('#recordsButton').onclick=renderRecords;$('#recordRetry').onclick=startRecordRetry;$('#settingsBack').onclick=()=>currentMethod==='retry'?renderRecords():openMethod(currentMethod);$('#start').onclick=begin;$('#lessonSettings').onclick=()=>show('settings');$('#lessonBack').onclick=$('#settingsBack').onclick;$('#prev').onclick=()=>{page--;active=page*perPage;renderLesson()};$('#next').onclick=()=>{page++;active=page*perPage;renderLesson()};$('#check').onclick=check;$('#returnPiece').onclick=returnPiece;$('#resetButton').onclick=reset;$('#hintButton').onclick=()=>{hintShown=!hintShown;renderAll()};$('#undoPen').onclick=undo;$('#zoomButton').onclick=openZoom;$('#closeZoom').onclick=()=>{$('#zoom').close();fitLessonViewport();fit()};$('#zoom').addEventListener('close',()=>{if(!$('#lesson').hidden)renderLesson()});$('#zoomReturn').onclick=returnPiece;$('#zoomReset').onclick=reset;$('#zoomCheck').onclick=check;$('#resultHome').onclick=renderHome;$('#retryNow').onclick=()=>{const list=profile()?.retry||[];list.length?openSettings(list,'もう一度'):renderHome()};$('#listViewButton').onclick=()=>setRecordView('list');$('#treeViewButton').onclick=()=>setRecordView('tree');$('#treeZoomIn').onclick=()=>zoomTree(.35);$('#treeZoomOut').onclick=()=>zoomTree(-.35);$('#treeReset').onclick=resetTree;$('#clearRecord').onclick=deleteSelectedProfile;bindTreeGestures();window.addEventListener('resize',fit);window.visualViewport?.addEventListener('resize',()=>{fitLessonViewport();fit()});window.visualViewport?.addEventListener('scroll',()=>{fitLessonViewport();if($('#zoom').open)fitZoom()});new ResizeObserver(fit).observe($('#paper'));show('cover');
+$('#recordsButton').onclick=renderRecords;$('#recordRetry').onclick=startRecordRetry;$('#settingsBack').onclick=()=>currentMethod==='retry'?renderRecords():openMethod(currentMethod);$('#start').onclick=begin;$('#lessonSettings').onclick=()=>show('settings');$('#lessonBack').onclick=$('#settingsBack').onclick;$('#prev').onclick=()=>{page--;active=lessonPages[page][0];renderLesson()};$('#next').onclick=()=>{page++;active=lessonPages[page][0];renderLesson()};$('#check').onclick=check;$('#returnPiece').onclick=returnPiece;$('#resetButton').onclick=reset;$('#hintButton').onclick=()=>{hintShown=!hintShown;renderAll()};$('#undoPen').onclick=undo;$('#zoomButton').onclick=openZoom;$('#closeZoom').onclick=()=>{$('#zoom').close();fitLessonViewport();fit()};$('#zoom').addEventListener('close',()=>{if(!$('#lesson').hidden)renderLesson()});$('#zoomReturn').onclick=returnPiece;$('#zoomReset').onclick=reset;$('#zoomCheck').onclick=check;$('#resultHome').onclick=renderHome;$('#retryNow').onclick=()=>{const list=profile()?.retry||[];list.length?openSettings(list,'もう一度'):renderHome()};$('#listViewButton').onclick=()=>setRecordView('list');$('#treeViewButton').onclick=()=>setRecordView('tree');$('#treeZoomIn').onclick=()=>zoomTree(.35);$('#treeZoomOut').onclick=()=>zoomTree(-.35);$('#treeReset').onclick=resetTree;$('#clearRecord').onclick=deleteSelectedProfile;bindTreeGestures();window.addEventListener('resize',fit);window.visualViewport?.addEventListener('resize',()=>{fitLessonViewport();fit()});window.visualViewport?.addEventListener('scroll',()=>{fitLessonViewport();if($('#zoom').open)fitZoom()});new ResizeObserver(fit).observe($('#paper'));show('cover');
 $('#groupCharsToggle').onclick=toggleGroupChars;
 for(const input of $$('input[name=mode],input[name=piecePool]'))input.onchange=syncPieceOptions;
 syncPieceOptions();
